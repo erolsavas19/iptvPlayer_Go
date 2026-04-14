@@ -1,0 +1,1 @@
+iptvPlayer_GO uygulamasını bilgisayarınıza indirip çalıştırabiliriniz.
