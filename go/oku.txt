@@ -1,0 +1,35 @@
+Özet
+Yapılan Her Şey
+1. Linux'ta Go Kurulumu:
+
+wget https://go.dev/dl/go1.22.4.linux-amd64.tar.gz
+sudo rm -rf /usr/local/go
+sudo tar -C /usr/local -xzf go1.22.4.linux-amd64.tar.gz
+echo 'export PATH=$PATH:/usr/local/go/bin' >> ~/.bashrc && source ~/.bashrc
+go version
+2. Cross-Platform Mimari:
+
+Uygulama artık Go'nun //go:build tag sistemi ile üç platformda derleniyor:
+
+Windows  → lxn/walk  + libvlc.dll   (mevcut kod — hiç değişmedi)
+Linux    → Fyne      + vlc komutu   (yeni dosyalar: _unix.go)
+macOS    → Fyne      + vlc komutu   (aynı _unix.go dosyaları)
+Temel tasarım kararı: Windows'ta VLC video uygulama penceresine gömülüdür. Linux/macOS'ta ise VLC kendi penceresinde açılır (X11/Wayland/Metal API'lerinden window handle almak çok karmaşık olurdu). Kanal listesi, arama, favoriler ve EPG her zaman uygulama penceresinde kalır.
+
+3. Linux/macOS'ta İlk Kez Çalıştırmak İçin:
+
+# 1. Sistem bağımlılıkları
+sudo apt install gcc libgl1-mesa-dev xorg-dev vlc libxcursor-dev libxrandr-dev libxinerama-dev libxi-dev
+
+# 2. Fyne bağımlılığını indir
+cd go
+go get fyne.io/fyne/v2
+go mod tidy
+
+# 3. Çalıştır
+go run .
+# veya: ./run.sh
+
+# 4. Release build
+./derle.sh
+4. README: Her iki dilde de Windows / Linux / macOS kurulum adımları, bağımlılık tabloları, proje yapısı ve sorun giderme bölümleri eklendi.

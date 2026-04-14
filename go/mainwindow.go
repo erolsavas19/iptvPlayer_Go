@@ -71,8 +71,8 @@ func (p *IPTVPlayer) createMainWindow() error {
 	err := MainWindow{
 		AssignTo: &p.mw,
 		Title:    "IPTV Player (Ver. 1.0)",
-		MinSize:  Size{Width: 640, Height: 480},
-		Size:     Size{Width: 1034, Height: 600},
+		MinSize:  Size{Width: WindowMinWidth, Height: WindowMinHeight},
+		Size:     Size{Width: WindowWidth, Height: WindowHeight},
 		Font:     Font{Family: "Segoe UI", PointSize: 9},
 
 		MenuItems: []MenuItem{

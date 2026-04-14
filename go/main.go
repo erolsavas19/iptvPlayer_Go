@@ -6,15 +6,13 @@ import (
 	"os"
 	"path/filepath"
 	"runtime/debug"
-
-	"github.com/lxn/walk"
+	"strings"
 )
 
 // AppLogger tüm uygulama boyunca kullanılan logger
 var AppLogger *log.Logger
 
 // setupLog exe dizininde iptvplayer.log dosyasını açar/oluşturur.
-// Dosyayı döner; çağıran defer ile kapatmalıdır.
 func setupLog() *os.File {
 	exePath, err := os.Executable()
 	if err != nil {
@@ -31,41 +29,32 @@ func setupLog() *os.File {
 }
 
 func main() {
-	// Log dosyasını kur
 	logFile := setupLog()
 	if logFile != nil {
 		defer logFile.Close()
 	}
 
-	// Yakalanmayan panicler için kurtarma; log dosyasına yazar ve kullanıcıya gösterir
+	// Yakalanmayan panicler için kurtarma
 	defer func() {
 		if r := recover(); r != nil {
 			msg := fmt.Sprintf("Kritik Hata (panic):\n%v\n\nStack:\n%s", r, debug.Stack())
 			if AppLogger != nil {
 				AppLogger.Println(msg)
 			}
-			walk.MsgBox(nil, "Kritik Hata", msg, walk.MsgBoxOK|walk.MsgBoxIconError)
+			showFatalError("Kritik Hata", msg)
 		}
 	}()
 
-	// Çalışma dizinini exe'nin bulunduğu yere ayarla
+	// Çalışma dizinini exe'nin bulunduğu yere ayarla.
+	// go run kullanıldığında exe geçici dizinde olur; o durumda chdir atlanır,
+	// böylece favorites.db kaynak dizininde korunur.
 	if exePath, err := os.Executable(); err == nil {
-		os.Chdir(filepath.Dir(exePath))
-	}
-
-	app, err := NewIPTVPlayer()
-	if err != nil {
-		if AppLogger != nil {
-			AppLogger.Println("Başlatma hatası:", err)
+		dir := filepath.Dir(exePath)
+		if !strings.Contains(filepath.ToSlash(dir), "/tmp/") &&
+			!strings.HasPrefix(dir, os.TempDir()) {
+			os.Chdir(dir)
 		}
-		walk.MsgBox(nil, "Başlatma Hatası", err.Error(), walk.MsgBoxOK|walk.MsgBoxIconError)
-		return
 	}
-	defer app.Close()
 
-	app.Run()
-
-	if AppLogger != nil {
-		AppLogger.Println("=== Uygulama kapandı ===")
-	}
+	runApp()
 }
