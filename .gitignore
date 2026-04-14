@@ -1,5 +1,5 @@
-# Derlenmiş çalıştırılabilir dosyalar
-*.exe
+# go/ klasöründeki ara derleme çıktıları (gereksiz)
+go/*.exe
 
 # Kullanıcıya özgü çalışma zamanı verileri
 *.db
