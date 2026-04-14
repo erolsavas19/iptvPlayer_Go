@@ -1,0 +1,19 @@
+# Derlenmiş çalıştırılabilir dosyalar
+*.exe
+
+# Kullanıcıya özgü çalışma zamanı verileri
+*.db
+*.log
+
+# Geçici derleme çıktıları
+go/out.txt
+
+# Örnek/test playlist (isteğe bağlı — kaldırmak isterseniz # işaretini silin)
+# *.m3u
+# *.m3u8
+
+# IDE ve editör dosyaları
+.vscode/
+.idea/
+*.user
+Thumbs.db
