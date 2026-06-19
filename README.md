@@ -1,8 +1,5 @@
 # IPTV Player — Go Edition
 
-<<<<<<< HEAD
-A lightweight, native Windows IPTV player built with Go. Plays M3U/M3U8 streams using VLC under the hood, with a clean native UI powered by the Walk framework.
-=======
 A lightweight, cross-platform IPTV player written in Go.  
 Plays M3U/M3U8 streams using VLC under the hood, with a clean native UI on every platform.
 
@@ -14,7 +11,6 @@ Plays M3U/M3U8 streams using VLC under the hood, with a clean native UI on every
 
 > **Windows & Linux:** Video renders *inside* the app window — no separate VLC window opens.  
 > **macOS:** Video opens in VLC's own window (NSView embedding is a future goal). Channel management, favorites, EPG and settings remain inside the app.
->>>>>>> f6425d8 (Linux ve MAC uyumluluğu)
 
 ---
 
@@ -22,28 +18,12 @@ Plays M3U/M3U8 streams using VLC under the hood, with a clean native UI on every
 
 ![Screenshot 1](ScreenShots01.png)
 ![Screenshot 2](ScreenShots02.png)
-<<<<<<< HEAD
-=======
 ![Screenshot 3](ScreenShots03.png)
->>>>>>> f6425d8 (Linux ve MAC uyumluluğu)
 
 ---
 
 ## Features
 
-<<<<<<< HEAD
-- **M3U / M3U8 playlist support** — load from a local file or any URL
-- **VLC-powered playback** — uses `libvlc.dll` at runtime; no CGO, no extra toolchain
-- **Channel search** — instant filtering by channel name
-- **Category filter** — group channels by their M3U group-title tag
-- **Favorites** — save and manage favorite channels (stored in a local SQLite database)
-- **EPG** — view Electronic Program Guide data per channel
-- **Fullscreen mode** — toggle with double-click on the video area or F11
-- **Channel logo display** — fetches and caches logos from M3U `tvg-logo` tags
-- **Auto-open URL** — configure a playlist URL that loads automatically on startup
-- **Bilingual UI** — switch between Turkish and English from the menu
-- **High DPI aware** — sharp rendering on high-resolution displays
-=======
 - **M3U / M3U8 playlist support** — load from a local file or any HTTP(S) URL
 - **VLC-powered playback** — no CGO required on any platform
 - **Embedded video** — video renders directly inside the app window (Windows & Linux)
@@ -58,21 +38,11 @@ Plays M3U/M3U8 streams using VLC under the hood, with a clean native UI on every
 - **Bilingual UI** — switch between Turkish and English at runtime (✓ checkmark on active language)
 - **Menu keyboard shortcuts** — Ctrl+O, Ctrl+U, Ctrl+P, Ctrl+S, Ctrl+E, F11
 - **Channel name in title bar** — active channel displayed as `PLAYER (Channel Name)`
->>>>>>> f6425d8 (Linux ve MAC uyumluluğu)
 
 ---
 
 ## Requirements
 
-<<<<<<< HEAD
-| Requirement | Version | Download |
-|---|---|---|
-| OS | Windows 10 / 11 (64-bit) | — |
-| Go | 1.21 or later | https://golang.org/dl/ |
-| VLC Media Player | 3.x or later (64-bit) | https://www.videolan.org/vlc/ |
-
-> **Note:** This application is Windows-only. The GUI framework (`lxn/walk`) targets the Windows API exclusively.
-=======
 ### Windows
 
 | Requirement | Version | Download |
@@ -90,12 +60,33 @@ Plays M3U/M3U8 streams using VLC under the hood, with a clean native UI on every
 | Requirement | Notes |
 |---|---|
 | OS | Any modern 64-bit distribution (Ubuntu 22.04+, Fedora 38+, etc.) |
-| Go | 1.21 or later |
-| GCC | Required by Fyne (OpenGL renderer) |
-| OpenGL / Xorg headers | Required by Fyne |
+| Go | 1.21 or later — only needed if building from source |
+| GCC | Required by Fyne (OpenGL renderer) — only needed if building from source |
+| OpenGL / Xorg headers | Required by Fyne — only needed if building from source |
 | VLC | Provides `libvlc.so.5` — video is embedded inside the app |
 
-Install all build and runtime dependencies at once:
+#### Option A — Running a Pre-Built Binary
+
+If you downloaded a compiled binary, you only need the runtime libraries (much smaller than build dependencies):
+
+```bash
+# 1. Make the binary executable
+chmod +x iptvPlayer_go_linux_amd64
+
+# 2. Install runtime libraries
+sudo apt install vlc libgl1 libxcursor1 libxrandr2 libxi6 libxinerama1
+
+# 3. Run from a terminal — NOT from the file manager
+./iptvPlayer_go_linux_amd64
+```
+
+> **XFCE / Thunar users:** Thunar (the XFCE file manager) does not know how to launch
+> ELF executables — it shows an **"Open With…" / "Select Application"** dialog instead of
+> running the app. Always launch from a terminal.
+
+#### Option B — Building from Source
+
+Install all build **and** runtime dependencies at once:
 
 ```bash
 # Debian / Ubuntu / Linux Mint
@@ -108,6 +99,31 @@ sudo dnf install golang gcc mesa-libGL-devel libXcursor-devel libXrandr-devel \
 # Arch Linux
 sudo pacman -S go gcc mesa libxcursor libxrandr libxinerama libxi vlc
 ```
+
+#### Desktop Integration (optional — XFCE, GNOME, KDE, etc.)
+
+Create a `.desktop` entry so the app appears in your application menu and can be launched
+by double-clicking in the file manager:
+
+```bash
+# Adjust the path to match where you placed the binary
+BINARY_PATH="$HOME/iptvPlayer_go_linux_amd64"
+
+cat > ~/.local/share/applications/iptv-player.desktop << EOF
+[Desktop Entry]
+Type=Application
+Name=IPTV Player
+Comment=M3U/M3U8 IPTV Player powered by VLC
+Exec=$BINARY_PATH
+Terminal=false
+Categories=AudioVideo;Video;Player;
+EOF
+
+# Refresh the application database
+update-desktop-database ~/.local/share/applications/
+```
+
+After this, double-clicking the binary in Thunar will launch the app directly.
 
 ---
 
@@ -125,28 +141,11 @@ xcode-select --install          # Xcode CLI tools
 brew install go                 # Go (or download from go.dev)
 brew install --cask vlc         # VLC
 ```
->>>>>>> f6425d8 (Linux ve MAC uyumluluğu)
 
 ---
 
 ## Getting Started
 
-<<<<<<< HEAD
-### 1. Install Go
-
-Download and run the Windows installer from https://golang.org/dl/  
-After installation, verify in a terminal:
-
-```
-go version
-```
-
-### 2. Install VLC
-
-Download the **64-bit** installer from https://www.videolan.org/vlc/ and install to the default location.
-
-### 3. Clone the repository
-=======
 ### Step 1 — Install Go
 
 **Windows:**  
@@ -181,43 +180,21 @@ brew install go
 ---
 
 ### Step 3 — Clone the Repository
->>>>>>> f6425d8 (Linux ve MAC uyumluluğu)
 
 ```bash
 git clone https://github.com/erolsavas19/iptvPlayer_GO.git
 cd iptvPlayer_GO
 ```
 
-<<<<<<< HEAD
-### 4. Download dependencies
-=======
 ---
 
 ### Step 4 — Download Dependencies
->>>>>>> f6425d8 (Linux ve MAC uyumluluğu)
 
 ```bash
 cd go
 go mod download
 ```
 
-<<<<<<< HEAD
-This fetches all libraries listed in `go.mod`. Requires an internet connection; allow a minute or two on the first run.
-
-### 5. Run from source
-
-**Option A — batch file (easiest):**  
-Double-click `go\run.bat`
-
-**Option B — terminal:**
-
-```bash
-cd go
-go run .
-```
-
-> A console window will appear alongside the app when using `go run`. This is normal in development mode.
-=======
 > Requires an internet connection. Allow a couple of minutes on the first run.
 
 ---
@@ -237,30 +214,18 @@ cd go
 ./run.sh
 # or: go run .
 ```
->>>>>>> f6425d8 (Linux ve MAC uyumluluğu)
 
 ---
 
 ## Building a Release Executable
 
-<<<<<<< HEAD
-```bash
-=======
 ### Windows
 
 ```bat
->>>>>>> f6425d8 (Linux ve MAC uyumluluğu)
 cd go
 go build -ldflags="-H windowsgui -s -w" -o ../iptvPlayer_go.exe .
 ```
 
-<<<<<<< HEAD
-Flag reference:
-- `-H windowsgui` — suppresses the console window (pure GUI app)
-- `-s -w` — strips debug symbols, reduces exe size
-
-Alternatively, double-click `go\derle.bat` for a full build that also embeds the application icon and manifest.
-=======
 Or use `go\derle.bat` which handles icon and manifest embedding automatically.
 
 | Flag | Effect |
@@ -313,7 +278,8 @@ GOOS=windows GOARCH=amd64 CGO_ENABLED=0 \
   go build -ldflags="-H windowsgui -s -w" -o ../iptvPlayer_go.exe .
 ```
 
-> Linux and macOS builds require CGO (Fyne's OpenGL/Metal renderer). Cross-compiling them requires a full cross-compiler toolchain — build natively on the target platform instead.
+> Linux and macOS builds require CGO (Fyne's OpenGL/Metal renderer). Cross-compiling them
+> requires a full cross-compiler toolchain — build natively on the target platform instead.
 
 ---
 
@@ -326,7 +292,21 @@ GOOS=windows GOARCH=amd64 CGO_ENABLED=0 \
 | macOS | `window.SetIcon()` at runtime | Icon in Dock / title bar |
 
 The icon file (`go/iptvPlayer.ico`) must be present alongside the binary or in the `go/` subdirectory.
->>>>>>> f6425d8 (Linux ve MAC uyumluluğu)
+
+---
+
+## Keyboard Shortcuts
+
+| Shortcut | Action |
+|---|---|
+| `Ctrl+O` | Open M3U file |
+| `Ctrl+U` | Open URL |
+| `Ctrl+P` | Play |
+| `Ctrl+S` | Stop |
+| `Ctrl+E` | Show EPG |
+| `F11` | Toggle fullscreen |
+| `ESC` | Exit fullscreen |
+| Double-click video | Toggle fullscreen |
 
 ---
 
@@ -337,28 +317,6 @@ iptvPlayer_GO/
 ├── README.md
 ├── LICENSE
 ├── .gitignore
-<<<<<<< HEAD
-├── iptvPlayer_go.exe        ← compiled executable
-└── go/                      ← all source files
-    ├── main.go              ← entry point; logging, panic recovery
-    ├── app.go               ← core struct; M3U loading, playback, favourites
-    ├── mainwindow.go        ← main window layout and all UI widgets
-    ├── video_win.go         ← VLC video render area (Windows subclassing)
-    ├── fullscreen_win.go    ← fullscreen toggle logic
-    ← VLC libvlc.dll integration (pure Go, no CGO)
-    ├── db.go                ← SQLite: favourites and app settings
-    ├── m3u.go               ← M3U/M3U8 parser
-    ├── dialogs.go           ← favourites, EPG, URL input windows
-    ├── lang.go              ← TR/EN string tables and language switching
-    ├── manifest_win.go      ← Windows DPI-aware manifest embedding
-    ├── app.manifest         ← Windows application manifest (XML)
-    ├── iptvPlayer.ico       ← application icon
-    ├── rsrc.syso            ← pre-compiled resources (icon + manifest)
-    ├── go.mod               ← module definition
-    ├── go.sum               ← dependency checksums
-    ├── run.bat              ← run-from-source helper
-    └── derle.bat            ← release build script
-=======
 ├── iptvPlayer_go.exe            ← compiled Windows executable
 ├── iptvPlayer_go_linux_amd64   ← compiled Linux executable
 └── go/                          ← all source files
@@ -397,27 +355,12 @@ iptvPlayer_GO/
         ├── dialogs_unix.go  ← favourites, EPG, URL input dialogs (Fyne)
         ├── run.sh           ← run-from-source helper
         └── derle.sh         ← release build script
->>>>>>> f6425d8 (Linux ve MAC uyumluluğu)
 ```
 
 ---
 
 ## Dependencies
 
-<<<<<<< HEAD
-| Package | Purpose |
-|---|---|
-| `github.com/lxn/walk` | Native Windows GUI framework |
-| `github.com/lxn/win` | Low-level Windows API bindings |
-| `golang.org/x/sys` | System calls — DLL loading, registry access |
-| `modernc.org/sqlite` | Pure-Go SQLite driver (no CGO required) |
-
----
-
-## Why is VLC required?
-
-The application loads VLC's `libvlc.dll` at runtime using the Windows `LoadLibrary` API — no CGO and no C compiler needed. This keeps the build simple (a single `go build` command) while still providing full VLC media engine capabilities. VLC is not bundled; it must be installed separately. If VLC is not found, the application shows an error message on startup.
-=======
 | Package | Purpose | Platforms |
 |---|---|---|
 | `github.com/lxn/walk` | Native Windows GUI framework | Windows only |
@@ -447,46 +390,70 @@ _(NSView embedding is planned for a future release.)_
 
 ---
 
-## Keyboard Shortcuts
+## Troubleshooting
 
-| Shortcut | Action |
-|---|---|
-| `Ctrl+O` | Open M3U file |
-| `Ctrl+U` | Open URL |
-| `Ctrl+P` | Play |
-| `Ctrl+S` | Stop |
-| `Ctrl+E` | Show EPG |
-| `F11` | Toggle fullscreen |
-| `ESC` | Exit fullscreen |
-| Double-click video | Toggle fullscreen |
+### Linux (XFCE / Thunar): "Open With" or "Select Application" dialog appears
+
+Thunar (XFCE file manager) does not execute ELF binaries directly — it opens an
+"Open With" dialog instead of running the app.
+
+**Solution: always launch from a terminal.**
+```bash
+chmod +x iptvPlayer_go_linux_amd64
+./iptvPlayer_go_linux_amd64
+```
+
+For a permanent fix, create a `.desktop` entry (see [Desktop Integration](#desktop-integration-optional--xfce-gnome-kde-etc) above).
 
 ---
 
-## Troubleshooting
+### Linux: OpenGL or display errors at runtime
+
+On minimal desktop environments (XFCE, LXDE, etc.) the OpenGL runtime may not be
+installed even when build dependencies are present:
+
+```bash
+sudo apt install libgl1 libxcursor1 libxrandr2 libxi6 libxinerama1
+```
+
+---
 
 ### Linux: Fyne build errors
+
 ```bash
 sudo apt install gcc libgl1-mesa-dev xorg-dev
 ```
 
+---
+
 ### Linux: `libvlc.so.5` not found at runtime
+
 ```bash
-sudo apt install vlc          # installs libvlc5 automatically
+sudo apt install vlc libvlc5
 ldconfig -p | grep libvlc     # verify the library is found
 ```
 
+---
+
 ### macOS: Gatekeeper blocks the binary
+
 ```bash
 xattr -cr ./iptvPlayer_go_darwin_amd64
 ```
 
+---
+
 ### Windows: VLC not found at startup
-Ensure 64-bit VLC is installed. The app searches the Windows registry and `C:\Program Files\VideoLAN\VLC\` automatically.
+
+Ensure 64-bit VLC is installed. The app searches the Windows registry and
+`C:\Program Files\VideoLAN\VLC\` automatically.
+
+---
 
 ### All platforms: favorites or settings lost after restart
+
 When running via `go run`, the working directory is `go/` and `favorites.db` is created there.  
 A compiled binary uses its own directory. Both are intentional and separate.
->>>>>>> f6425d8 (Linux ve MAC uyumluluğu)
 
 ---
 
@@ -499,9 +466,6 @@ MIT License — see [LICENSE](LICENSE) for details.
 
 # IPTV Player — Go Sürümü
 
-<<<<<<< HEAD
-Go ile yazılmış, hafif ve yerel Windows IPTV oynatıcısı. M3U/M3U8 akışlarını VLC altyapısıyla oynatır; kullanıcı arayüzü Walk framework'ü ile oluşturulmuş tam yerel bir Windows uygulamasıdır.
-=======
 Go ile yazılmış, çok platformlu hafif bir IPTV oynatıcısı.  
 M3U/M3U8 akışlarını VLC altyapısıyla oynatır; kullanıcı arayüzü platforma göre farklı framework'lerle oluşturulur.
 
@@ -513,7 +477,6 @@ M3U/M3U8 akışlarını VLC altyapısıyla oynatır; kullanıcı arayüzü platf
 
 > **Windows ve Linux:** Video doğrudan uygulama penceresine gömülür — ayrı bir VLC penceresi açılmaz.  
 > **macOS:** Video VLC'nin kendi penceresinde açılır (NSView gömme gelecekte planlanmaktadır). Kanal yönetimi, favoriler, EPG ve ayarlar uygulama penceresinde kalır.
->>>>>>> f6425d8 (Linux ve MAC uyumluluğu)
 
 ---
 
@@ -521,28 +484,12 @@ M3U/M3U8 akışlarını VLC altyapısıyla oynatır; kullanıcı arayüzü platf
 
 ![Ekran Görüntüsü 1](ScreenShots01.png)
 ![Ekran Görüntüsü 2](ScreenShots02.png)
-<<<<<<< HEAD
-=======
 ![Ekran Görüntüsü 3](ScreenShots03.png)
->>>>>>> f6425d8 (Linux ve MAC uyumluluğu)
 
 ---
 
 ## Özellikler
 
-<<<<<<< HEAD
-- **M3U / M3U8 playlist desteği** — yerel dosya veya URL'den yükleme
-- **VLC tabanlı oynatma** — `libvlc.dll` çalışma zamanında yüklenir; CGO veya ekstra araç gerekmez
-- **Kanal arama** — kanal adına göre anlık filtreleme
-- **Kategori filtresi** — M3U group-title etiketine göre gruplama
-- **Favoriler** — favori kanalları kaydetme ve yönetme (yerel SQLite veritabanı)
-- **EPG** — Elektronik Program Rehberi verilerini kanal bazında görüntüleme
-- **Tam ekran modu** — video alanına çift tıklama veya F11 ile geçiş
-- **Kanal logosu görüntüleme** — M3U `tvg-logo` etiketindeki logolar indirilir ve önbelleğe alınır
-- **Otomatik URL açma** — başlangıçta otomatik yüklenecek playlist URL'si ayarı
-- **İki dilli arayüz** — menüden Türkçe ve İngilizce arasında geçiş
-- **Yüksek DPI desteği** — yüksek çözünürlüklü ekranlarda keskin görüntü
-=======
 - **M3U / M3U8 playlist desteği** — yerel dosya veya HTTP(S) URL'den yükleme
 - **VLC tabanlı oynatma** — hiçbir platformda CGO gerekmez
 - **Gömülü video** — video doğrudan uygulama penceresi içinde oynar (Windows ve Linux)
@@ -557,21 +504,11 @@ M3U/M3U8 akışlarını VLC altyapısıyla oynatır; kullanıcı arayüzü platf
 - **İki dilli arayüz** — çalışma sırasında Türkçe/İngilizce geçişi (aktif dil menüde ✓ ile işaretlenir)
 - **Menü klavye kısayolları** — Ctrl+O, Ctrl+U, Ctrl+P, Ctrl+S, Ctrl+E, F11
 - **Başlık çubuğunda kanal adı** — aktif kanal `OYNATICI (Kanal Adı)` biçiminde gösterilir
->>>>>>> f6425d8 (Linux ve MAC uyumluluğu)
 
 ---
 
 ## Sistem Gereksinimleri
 
-<<<<<<< HEAD
-| Gereksinim | Sürüm | İndirme |
-|---|---|---|
-| İşletim Sistemi | Windows 10 / 11 (64-bit) | — |
-| Go | 1.21 veya üzeri | https://golang.org/dl/ |
-| VLC Media Player | 3.x veya üzeri (64-bit) | https://www.videolan.org/vlc/ |
-
-> **Not:** Bu uygulama yalnızca Windows'ta çalışır. Kullanılan GUI kütüphanesi (`lxn/walk`) yalnızca Windows API'sini hedefler.
-=======
 ### Windows
 
 | Gereksinim | Sürüm | İndirme |
@@ -589,12 +526,33 @@ M3U/M3U8 akışlarını VLC altyapısıyla oynatır; kullanıcı arayüzü platf
 | Gereksinim | Notlar |
 |---|---|
 | İşletim Sistemi | Modern 64-bit dağıtım (Ubuntu 22.04+, Fedora 38+ vb.) |
-| Go | 1.21 veya üzeri |
-| GCC | Fyne'ın OpenGL renderer'ı için gereklidir |
-| OpenGL / Xorg başlıkları | Fyne için gereklidir |
+| Go | 1.21 veya üzeri — yalnızca kaynak koddan derleyecekseniz gerekli |
+| GCC | Fyne'ın OpenGL renderer'ı için — yalnızca kaynak koddan derleyecekseniz gerekli |
+| OpenGL / Xorg başlıkları | Fyne için — yalnızca kaynak koddan derleyecekseniz gerekli |
 | VLC | `libvlc.so.5` sağlar — video uygulama içinde oynar |
 
-Tüm bağımlılıkları tek komutla kurun:
+#### Seçenek A — Hazır Binary ile Çalıştırma
+
+Derlenmiş binary indirdiyseniz yalnızca çalışma zamanı kütüphaneleri yeterlidir (derleme bağımlılıklarından çok daha az):
+
+```bash
+# 1. Binary'ye çalıştırma izni verin
+chmod +x iptvPlayer_go_linux_amd64
+
+# 2. Çalışma zamanı kütüphanelerini kurun
+sudo apt install vlc libgl1 libxcursor1 libxrandr2 libxi6 libxinerama1
+
+# 3. Terminalde çalıştırın — dosya yöneticisinden DEĞİL
+./iptvPlayer_go_linux_amd64
+```
+
+> **XFCE / Thunar kullanıcıları:** Thunar (XFCE dosya yöneticisi) ELF binary dosyalarını
+> doğrudan çalıştırmayı bilmez — uygulamayı başlatmak yerine **"Uygulamayla Aç" / "Listeden
+> bir uygulama seç"** dialog'u gösterir. Uygulamayı her zaman bir **terminal** üzerinden başlatın.
+
+#### Seçenek B — Kaynak Koddan Derleme
+
+Derleme **ve** çalışma zamanı bağımlılıklarını tek komutla kurun:
 
 ```bash
 # Debian / Ubuntu / Linux Mint
@@ -607,6 +565,31 @@ sudo dnf install golang gcc mesa-libGL-devel libXcursor-devel libXrandr-devel \
 # Arch Linux
 sudo pacman -S go gcc mesa libxcursor libxrandr libxinerama libxi vlc
 ```
+
+#### Masaüstü Entegrasyonu (isteğe bağlı — XFCE, GNOME, KDE vb.)
+
+Uygulamanın uygulama menüsünde görünmesi ve dosya yöneticisinden çift tıklamayla
+başlatılabilmesi için `.desktop` girdisi oluşturun:
+
+```bash
+# Binary'nin bulunduğu tam yolu girin
+BINARY_PATH="$HOME/iptvPlayer_go_linux_amd64"
+
+cat > ~/.local/share/applications/iptv-player.desktop << EOF
+[Desktop Entry]
+Type=Application
+Name=IPTV Player
+Comment=VLC destekli M3U/M3U8 IPTV oynatıcısı
+Exec=$BINARY_PATH
+Terminal=false
+Categories=AudioVideo;Video;Player;
+EOF
+
+# Uygulama veritabanını yenileyin
+update-desktop-database ~/.local/share/applications/
+```
+
+Bu işlemden sonra Thunar'da binary'ye çift tıklamak doğrudan uygulamayı başlatır.
 
 ---
 
@@ -624,28 +607,11 @@ xcode-select --install          # Xcode CLI araçları
 brew install go                 # Go (veya go.dev'den indir)
 brew install --cask vlc         # VLC
 ```
->>>>>>> f6425d8 (Linux ve MAC uyumluluğu)
 
 ---
 
 ## Kurulum ve Çalıştırma
 
-<<<<<<< HEAD
-### 1. Go Kurulumu
-
-https://golang.org/dl/ adresinden Windows için `.msi` dosyasını indirin ve kurun.  
-Kurulumdan sonra terminalde doğrulayın:
-
-```
-go version
-```
-
-### 2. VLC Kurulumu
-
-https://www.videolan.org/vlc/ adresinden **64-bit** VLC'yi indirin ve varsayılan konuma kurun.
-
-### 3. Depoyu İndirin
-=======
 ### Adım 1 — Go Kurulumu
 
 **Windows:**  
@@ -680,49 +646,23 @@ brew install go
 ---
 
 ### Adım 3 — Depoyu İndirin
->>>>>>> f6425d8 (Linux ve MAC uyumluluğu)
 
 ```bash
 git clone https://github.com/erolsavas19/iptvPlayer_GO.git
 cd iptvPlayer_GO
 ```
 
-<<<<<<< HEAD
-### 4. Bağımlılıkları İndirin
-=======
 ---
 
 ### Adım 4 — Bağımlılıkları İndirin
->>>>>>> f6425d8 (Linux ve MAC uyumluluğu)
 
 ```bash
 cd go
 go mod download
 ```
 
-<<<<<<< HEAD
-Bu komut `go.mod` dosyasındaki tüm kütüphaneleri otomatik olarak indirir. İnternet bağlantısı gerektirir; ilk çalıştırmada 1-2 dakika sürebilir.
+> İnternet bağlantısı gerektirir. İlk çalıştırmada 1-2 dakika sürebilir.
 
-### 5. Çalıştırın
-
-**Yöntem A — Batch dosyası ile (en kolay):**  
-`go\run.bat` dosyasına çift tıklayın.
-
-**Yöntem B — Terminal ile:**
-
-```bash
-cd go
-go run .
-```
-
-> `go run` ile çalıştırıldığında arka planda küçük bir konsol penceresi açılır; geliştirme sırasında bu normaldir.
-
----
-
-## Exe Derleme (Release Build)
-
-```bash
-=======
 ---
 
 ### Adım 5 — Çalıştırın
@@ -748,18 +688,10 @@ cd go
 ### Windows
 
 ```bat
->>>>>>> f6425d8 (Linux ve MAC uyumluluğu)
 cd go
 go build -ldflags="-H windowsgui -s -w" -o ../iptvPlayer_go.exe .
 ```
 
-<<<<<<< HEAD
-Bayrak açıklamaları:
-- `-H windowsgui` — konsol penceresi açılmaz (saf GUI uygulaması)
-- `-s -w` — hata ayıklama sembolleri çıkarılır, exe boyutu küçülür
-
-Alternatif olarak `go\derle.bat` dosyasını çalıştırabilirsiniz; bu script uygulama ikonunu ve manifestını da gömerek tam bir release build üretir.
-=======
 | Bayrak | Efekt |
 |---|---|
 | `-H windowsgui` | Konsol penceresi açılmaz |
@@ -812,7 +744,8 @@ GOOS=windows GOARCH=amd64 CGO_ENABLED=0 \
   go build -ldflags="-H windowsgui -s -w" -o ../iptvPlayer_go.exe .
 ```
 
-> Linux ve macOS derlemeleri CGO (Fyne) gerektirdiğinden çapraz derleme için ek araç zinciri gerekir; hedef platformda yerel olarak derlemek önerilir.
+> Linux ve macOS derlemeleri CGO (Fyne) gerektirdiğinden çapraz derleme için ek araç
+> zinciri gerekir; hedef platformda yerel olarak derlemek önerilir.
 
 ---
 
@@ -838,7 +771,6 @@ GOOS=windows GOARCH=amd64 CGO_ENABLED=0 \
 | `F11` | Tam ekran geçiş |
 | `ESC` | Tam ekrandan çık |
 | Video üzerine çift tıklama | Tam ekran geçiş |
->>>>>>> f6425d8 (Linux ve MAC uyumluluğu)
 
 ---
 
@@ -849,28 +781,6 @@ iptvPlayer_GO/
 ├── README.md
 ├── LICENSE
 ├── .gitignore
-<<<<<<< HEAD
-├── iptvPlayer_go.exe        ← derlenmiş uygulama
-└── go/                      ← tüm kaynak kodlar
-    ├── main.go              ← giriş noktası; log kurulumu, panic kurtarma
-    ├── app.go               ← temel yapı; M3U yükleme, oynatma, favoriler
-    ├── mainwindow.go        ← ana pencere düzeni ve tüm UI bileşenleri
-    ├── video_win.go         ← VLC video render alanı (Windows subclassing)
-    ├── fullscreen_win.go    ← tam ekran geçiş mantığı
-    ├── vlc.go               ← VLC libvlc.dll entegrasyonu (saf Go, CGO yok)
-    ├── db.go                ← SQLite: favoriler ve uygulama ayarları
-    ├── m3u.go               ← M3U/M3U8 parser
-    ├── dialogs.go           ← favoriler, EPG, URL giriş pencereleri
-    ├── lang.go              ← TR/EN dil dizileri ve dil değiştirme
-    ├── manifest_win.go      ← Windows DPI aware manifest gömme
-    ├── app.manifest         ← Windows uygulama manifestı (XML)
-    ├── iptvPlayer.ico       ← uygulama ikonu
-    ├── rsrc.syso            ← önceden derlenmiş kaynaklar (ikon + manifest)
-    ├── go.mod               ← modül tanımı
-    ├── go.sum               ← bağımlılık hash'leri
-    ├── run.bat              ← kaynak koddan çalıştırma scripti
-    └── derle.bat            ← release derleme scripti
-=======
 ├── iptvPlayer_go.exe            ← Derlenmiş Windows uygulaması
 ├── iptvPlayer_go_linux_amd64   ← Derlenmiş Linux uygulaması
 └── go/                          ← Tüm kaynak kodlar
@@ -909,27 +819,12 @@ iptvPlayer_GO/
         ├── dialogs_unix.go  ← Favoriler, EPG, URL giriş diyalogları (Fyne)
         ├── run.sh           ← Kaynak koddan çalıştırma (Linux/macOS)
         └── derle.sh         ← Release derleme scripti (Linux/macOS)
->>>>>>> f6425d8 (Linux ve MAC uyumluluğu)
 ```
 
 ---
 
 ## Bağımlılıklar
 
-<<<<<<< HEAD
-| Paket | Amaç |
-|---|---|
-| `github.com/lxn/walk` | Windows yerel GUI framework'ü |
-| `github.com/lxn/win` | Düşük seviye Windows API bağlamaları |
-| `golang.org/x/sys` | Sistem çağrıları — DLL yükleme, kayıt defteri erişimi |
-| `modernc.org/sqlite` | Saf Go SQLite sürücüsü (CGO gerektirmez) |
-
----
-
-## VLC Neden Gerekli?
-
-Uygulama, video oynatmak için sisteminizde kurulu VLC'nin `libvlc.dll` dosyasını Windows `LoadLibrary` API'si ile çalışma zamanında yükler. CGO veya C derleyicisi gerekmez; tek bir `go build` komutu yeterlidir. VLC uygulamaya dahil edilmez, ayrıca kurulması gerekir. VLC bulunamazsa uygulama başlarken bir hata mesajı gösterir.
-=======
 | Paket | Amaç | Platform |
 |---|---|---|
 | `github.com/lxn/walk` | Yerel Windows GUI framework'ü | Yalnızca Windows |
@@ -960,29 +855,68 @@ _(NSView gömme gelecek sürümlerde planlanmaktadır.)_
 
 ## Sorun Giderme
 
+### Linux (XFCE / Thunar): "Uygulamayla Aç" veya "Listeden bir uygulama seç" dialog'u çıkıyor
+
+Thunar (XFCE dosya yöneticisi) ELF binary dosyalarını doğrudan çalıştırmaz — uygulamayı
+başlatmak yerine "Uygulamayla Aç" dialog'u gösterir.
+
+**Çözüm: her zaman terminalden çalıştırın.**
+```bash
+chmod +x iptvPlayer_go_linux_amd64
+./iptvPlayer_go_linux_amd64
+```
+
+Kalıcı çözüm için yukarıdaki [Masaüstü Entegrasyonu](#masaüstü-entegrasyonu-isteğe-bağlı--xfce-gnome-kde-vb) bölümüne bakın.
+
+---
+
+### Linux: Çalışma zamanında OpenGL veya ekran hatası
+
+Minimal masaüstü ortamlarında (XFCE, LXDE vb.) derleme bağımlılıkları kurulu olsa bile
+OpenGL çalışma zamanı kütüphaneleri eksik olabilir:
+
+```bash
+sudo apt install libgl1 libxcursor1 libxrandr2 libxi6 libxinerama1
+```
+
+---
+
 ### Linux: Fyne derleme hataları
+
 ```bash
 sudo apt install gcc libgl1-mesa-dev xorg-dev
 ```
 
+---
+
 ### Linux: `libvlc.so.5` çalışma zamanında bulunamadı
+
 ```bash
-sudo apt install vlc          # libvlc5'i otomatik kurar
+sudo apt install vlc libvlc5
 ldconfig -p | grep libvlc     # kütüphanenin bulunduğunu doğrulayın
 ```
 
+---
+
 ### macOS: Gatekeeper binary'yi engelledi
+
 ```bash
 xattr -cr ./iptvPlayer_go_darwin_amd64
 ```
 
+---
+
 ### Windows: Başlangıçta VLC bulunamadı
-64-bit VLC'nin kurulu olduğundan emin olun. Uygulama Windows kayıt defterini ve `C:\Program Files\VideoLAN\VLC\` yolunu otomatik arar.
+
+64-bit VLC'nin kurulu olduğundan emin olun. Uygulama Windows kayıt defterini ve
+`C:\Program Files\VideoLAN\VLC\` yolunu otomatik arar.
+
+---
 
 ### Tüm platformlar: Favoriler veya ayarlar yeniden başlatmada sıfırlanıyor
+
 `go run` ile çalıştırıldığında `favorites.db` dosyası `go/` klasöründe oluşturulur.  
 Derlenmiş binary kendi bulunduğu klasörü kullanır. Her iki durum kasıtlı ve birbirinden bağımsızdır.
->>>>>>> f6425d8 (Linux ve MAC uyumluluğu)
 
 ---
 
